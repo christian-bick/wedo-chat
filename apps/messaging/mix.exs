@@ -23,7 +23,7 @@ defmodule Messaging.MixProject do
   def application do
     [
       mod: {Messaging.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :mongodb_driver]
     ]
   end
 
@@ -41,7 +41,8 @@ defmodule Messaging.MixProject do
       {:absinthe_phoenix, "~> 1.4.0"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:distillery, "~> 2.1"}
+      {:mongodb_driver, "~> 0.6"},
+      {:redix, "~> 0.10"},
     ]
   end
 end

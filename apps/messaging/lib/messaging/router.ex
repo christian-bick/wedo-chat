@@ -9,6 +9,8 @@ defmodule Messaging.Router do
 
   pipe_through :api
 
+  get "/health", Messaging.HealthController, :index
+
   forward "/doc", Absinthe.Plug.GraphiQL,
     schema: MessagingWeb.Schema
 

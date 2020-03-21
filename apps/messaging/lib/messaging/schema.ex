@@ -8,7 +8,7 @@ defmodule MessagingWeb.Schema do
 
   query do
     field :all_links, non_null(list_of(non_null(:link))) do
-      resolve &Messaging.Resolvers.Links.all_links/3
+      resolve &Messaging.LinkResolver.all_links/3
     end
   end
 end
