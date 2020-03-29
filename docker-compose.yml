@@ -6,7 +6,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
-      MONGO_INITDB_DATABASE: admin
+      MONGO_INITDB_DATABASE: messaging
     volumes:
       - mongodb:/data/db
       - ./seed/mongo-user.js:/docker-entrypoint-initdb.d/mongo-user.js

@@ -13,10 +13,10 @@ defmodule Messaging.Application do
           [
             name: :mongo,
             hostname: "mongodb",
-            database: "admin",
+            database: "messaging",
             pool_size: 3,
-            username: "root",
-            password: "root"
+            username: "messaging",
+            password: "messaging"
           ]
         ]
       ),
