@@ -7,5 +7,6 @@ for config <- "../apps/*/config/config.exs" |> Path.expand(__DIR__) |> Path.wild
   import_config config
 end
 
-config :messaging, Messaging.Endpoint,
-  http: [port: 4000]
+config :phoenix, :json_library, Jason
+
+import_config "#{Mix.env()}.exs"
