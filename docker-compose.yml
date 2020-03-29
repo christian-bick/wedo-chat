@@ -18,14 +18,17 @@ services:
       - redis:/data
 
   messaging:
-    build: ./apps/messaging
+    build:
+      context: .
+      args:
+        app: messaging
     ports:
       - 8080:8080
     depends_on:
       - redis
       - mongodb
     volumes:
-      - ./apps/messaging:/app
+      - ./:/project
 
 volumes:
   mongodb:
