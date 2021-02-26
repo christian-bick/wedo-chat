@@ -1,4 +1,6 @@
 # WedoChat
 
-**TODO: Add description**
+```
+docker-compose up
+```
 
