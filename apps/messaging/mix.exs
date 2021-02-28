@@ -39,6 +39,7 @@ defmodule Messaging.MixProject do
       {:phoenix, "~> 1.4.16"},
       {:absinthe, "~> 1.4.0"},
       {:absinthe_phoenix, "~> 1.4.0"},
+      {:neuron, "~> 5.0.0"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:mongodb_driver, "~> 0.6"},
