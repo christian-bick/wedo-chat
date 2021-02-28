@@ -1,16 +1,9 @@
 defmodule Messaging.ChannelResolver do
 
   def find(_parent, %{:id => id}, _resolution) do
-    result = Mongo.find_one(:mongo, "channels", %{_id: BSON.ObjectId.decode!(id)})
-    case result do
-      %{"_id" => id, "name" => name} ->
-        {:ok, %{id: BSON.ObjectId.encode!(id), name: name}}
-      nil ->
-        {:error, "Not found"}
-      {:error, error} ->
-        IO.inspect(error)
-        {:error, ["Database Error", error.message ]}
-    end
+    result = Mongo.find_one(:mongo, "channels", %{_id: BSON.ObjectId.decode!(id)}) |> Mongo.Mapper.decode
+    IO.inspect result
+    result
   end
 
   def create(_parent, %{:name => name}, _resolution) do
