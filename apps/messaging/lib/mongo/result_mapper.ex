@@ -1,15 +1,19 @@
-defmodule Mongo.Mapper do
+defmodule Mongo.ResultMapper do
   require Logger
 
-  def decode (result) do
+  def uuid (id) do
+    BSON.ObjectId.encode!(id)
+  end
+
+  def singleDoc (result) do
     case result do
       {:error, error} ->
         Logger.error(error)
         {:error, ["Database Error", error.message]}
       nil ->
-        {:error, "Not found"}
+        {:error, ["Client Error", "Document not found"]}
       %{"_id" => _id} = values ->
-        decodedId = %{:id => BSON.ObjectId.encode!(_id)}
+        decodedId = %{:id => uuid(_id)}
         decodedAttr = values
                       |> Map.delete("_id")
                       |> Map.keys()
@@ -20,6 +24,16 @@ defmodule Mongo.Mapper do
                            end
                          )
         {:ok, Map.merge(decodedId, decodedAttr)}
+    end
+  end
+
+  def singleInsert (result) do
+    case result do
+      {:error, error} ->
+        Logger.error(error)
+        {:error, ["Database Error", error.message]}
+      {:ok, %Mongo.InsertOneResult{ :inserted_id => id }} ->
+        {:ok, %{id: uuid(id)}}
     end
   end
 end
