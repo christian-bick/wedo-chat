@@ -19,12 +19,8 @@ defmodule Mongo.ResultMapper do
                            end
                          )
         {:ok, Map.merge(decodedId, decodedAttr)}
-      {:error, error} ->
-        Logger.error(error)
-        {:error, ["Database Error", error.message]}
       nil ->
-        {:error, ["Client Error", "Document not found"]}
-
+        {:error, ["Request Error", "Document not found"]}
     end
   end
 
