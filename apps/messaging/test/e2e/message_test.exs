@@ -8,74 +8,15 @@ defmodule E2E.ChannelTest do
   describe "message" do
 
     setup do
-      {
-        :ok,
-        %Neuron.Response{
-          body: %{
-            "data" => %{
-              "createChannel" => %{
-                "id" => channel_id
-              }
-            }
-          }
-        }
-      } = Neuron.query(
-        """
-        mutation createChannel {
-          createChannel {
-            id
-          }
-        }
-        """
-      )
-
-      {
-        :ok,
-        %Neuron.Response{
-          body: %{
-            "data" => %{
-              "createUser" => %{
-                "id" => user_id
-              }
-            }
-          }
-        }
-      } = Neuron.query(
-        """
-        mutation createUser {
-          createUser {
-            id
-          }
-        }
-        """
-      )
-
+      %{"id" => channel_id} = Messaging.ChannelClient.create()
+      %{"id" => user_id} = Messaging.UserClient.create()
       {:ok, channel_id: channel_id, user_id: user_id}
     end
 
-    test "post & find", %{ :channel_id => channel_id, :user_id => user_id} do
-      query = """
-      mutation postMessage {
-        postMessage(channel_id: "#{channel_id}", sender_id: "#{user_id}", content: "Test") {
-          id
-        }
-      }
-      """
-      IO.puts(query)
-      postResult = Neuron.query(query)
-
-      assert {
-               :ok,
-               %Neuron.Response{
-                 body: %{
-                   "data" => %{
-                     "postMessage" => %{
-                       "id" => id
-                     }
-                   }
-                 }
-               }
-             } = postResult
+    test "post & find", %{:channel_id => channel_id, :user_id => user_id} do
+      assert %{"id" => id} = Messaging.MessageClient.post(
+               %{channel_id: channel_id, sender_id: user_id, content: "Content"}
+             )
     end
   end
 end

@@ -6,54 +6,9 @@ defmodule E2E.UserTest do
   end
 
   describe "user" do
-
     test "create & find" do
-
-      createResult = Neuron.query(
-        """
-        mutation createUser {
-          createUser {
-            id
-          }
-        }
-        """
-      )
-
-      assert { :ok,
-               %Neuron.Response{
-                 body: %{
-                   "data" => %{
-                     "createUser" => %{
-                       "id" => id
-                     }
-                   }
-                 }
-               }
-             } = createResult
-
-      findResult = Neuron.query(
-        """
-        {
-          user(id: "#{id}") {
-            id
-          }
-        }
-        """
-      )
-
-      assert {
-               :ok,
-               %Neuron.Response{
-                 body: %{
-                   "data" => %{
-                     "user" => %{
-                       "id" => id,
-                     }
-                   }
-                 },
-                 status_code: 200
-               }
-             } = findResult
+      assert %{"id" => id} = Messaging.UserClient.create()
+      assert %{"id" => id} = Messaging.UserClient.find(id)
     end
   end
 end

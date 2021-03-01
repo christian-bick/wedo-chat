@@ -6,56 +6,9 @@ defmodule E2E.MessageTest do
   end
 
   describe "channel" do
-
     test "create & find" do
-
-      createResult = Neuron.query(
-        """
-        mutation createChannel {
-          createChannel {
-            id
-          }
-        }
-        """
-      )
-
-      assert {
-               :ok,
-               %Neuron.Response{
-                 body: %{
-                   "data" => %{
-                     "createChannel" => %{
-                       "id" => id
-                     }
-                   }
-                 },
-                 status_code: 200
-               }
-             } = createResult
-
-      findResult = Neuron.query(
-        """
-        {
-          channel(id: "#{id}") {
-            id
-          }
-        }
-        """
-      )
-
-      assert {
-               :ok,
-               %Neuron.Response{
-                 body: %{
-                   "data" => %{
-                     "channel" => %{
-                       "id" => id,
-                     }
-                   }
-                 },
-                 status_code: 200
-               }
-             } = findResult
+      assert %{"id" => id} = Messaging.ChannelClient.create()
+      assert %{"id" => id} = Messaging.ChannelClient.find(id)
     end
   end
 end
