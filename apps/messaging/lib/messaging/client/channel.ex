@@ -24,4 +24,21 @@ defmodule Messaging.ChannelClient do
     )
     |> Neuron.ResponseMapper.field(:channel)
   end
+
+  def findWithMessages(id) do
+    Neuron.query(
+      """
+      {
+        channel (id: "#{id}") {
+          id
+          messages {
+            id,
+            content
+          }
+        }
+      }
+      """
+    )
+    |> Neuron.ResponseMapper.field(:channel)
+  end
 end

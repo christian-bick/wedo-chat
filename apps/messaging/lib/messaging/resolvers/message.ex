@@ -8,12 +8,16 @@ defmodule Messaging.MessageResolver do
   def find(_parent, %{:channel_id => channel_id, :message_id => message_id}, _resolution) do
     {:ok, %{:id => id, :entries => entries}} =
       Redix.command(:redis, ["XRANGE", "channel:#{channel_id}", message_id, "+", "COUNT", "1"])
-      |> Redis.StreamResultMapper.singleRead
+      |> Redis.StreamResultMapper.singleFetch
     {:ok, Map.merge(%{id: id}, entries)}
   end
 
-  def recent(_parent, _args, _resolution) do
-    {:ok, [%{channel: "1", content: "Hello"}]}
+  def recent(%{:id => channel_id}, _args, _resolution) do
+    {:ok, entry_list } =
+      Redix.command(:redis, ["XRANGE", "channel:#{channel_id}", "-", "+", "COUNT", "100"])
+      |> Redis.StreamResultMapper.multiFetch
+    message_list = Enum.map(entry_list, fn %{:id => id, :entries => entries} -> Map.merge(%{id: id}, entries) end)
+    {:ok, message_list}
   end
 
 end

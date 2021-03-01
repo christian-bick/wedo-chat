@@ -2,7 +2,6 @@ defmodule Redis.StreamResultMapper do
   require Logger
 
   def entryListToMap(entryList) do
-    IO.inspect(entryList)
     {_, map} = List.foldl(
       entryList,
       {false, %{}},
@@ -10,11 +9,10 @@ defmodule Redis.StreamResultMapper do
         if nextKey == false do
           {nextElem, map}
         else
-          {false, Map.put(map, nextKey, nextElem)}
+          {false, Map.put(map, String.to_existing_atom(nextKey), nextElem)}
         end
       end
     )
-    IO.inspect(map)
     map
   end
 
@@ -29,10 +27,17 @@ defmodule Redis.StreamResultMapper do
     end
   end
 
-  def singleRead(result) do
+  def singleFetch(result) do
     case result do
       {:ok, [[id, entryList]]} ->
         {:ok, %{id: id, entries: entryListToMap(entryList)}}
+    end
+  end
+
+  def multiFetch(result) do
+    case result do
+      {:ok, list } ->
+        {:ok, Enum.map(list, fn [id, entryList] -> %{id: id, entries: entryListToMap(entryList)} end) }
     end
   end
 

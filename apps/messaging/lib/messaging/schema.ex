@@ -8,7 +8,9 @@ defmodule MessagingWeb.Schema do
   object :message do
     field :id, non_null(:id)
     field :channel, :channel
-    field :sender, :user
+    field :sender, :user do
+      resolve &Messaging.UserResolver.find/3
+    end
     field :content, non_null(:string)
   end
 

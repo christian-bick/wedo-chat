@@ -1,4 +1,4 @@
-defmodule E2E.ChannelTest do
+defmodule E2E.MessageTest do
   use ExUnit.Case, async: false
 
   setup_all do
@@ -20,6 +20,23 @@ defmodule E2E.ChannelTest do
       assert %{"id" => message_id} = Messaging.MessageClient.find(
                %{channel_id: context.channel_id, message_id: message_id}
              )
+    end
+
+    test "recent", context do
+      Messaging.MessageClient.post(Map.merge(context, %{content: "test-1"}))
+      Messaging.MessageClient.post(Map.merge(context, %{content: "test-2"}))
+      Messaging.MessageClient.post(Map.merge(context, %{content: "test-3"}))
+
+      result = Messaging.ChannelClient.findWithMessages(context.channel_id)
+      assert %{
+        "id" => _,
+        "messages" => [
+          %{"content" => "test-1", "id" => _},
+          %{"content" => "test-2", "id" => _},
+          %{"content" => "test-3", "id" => _}
+        ]
+      } = result
+
     end
   end
 end
