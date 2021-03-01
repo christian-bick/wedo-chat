@@ -10,12 +10,12 @@ defmodule E2E.ChannelTest do
     setup do
       %{"id" => channel_id} = Messaging.ChannelClient.create()
       %{"id" => user_id} = Messaging.UserClient.create()
-      {:ok, channel_id: channel_id, user_id: user_id}
+      {:ok, channel_id: channel_id, sender_id: user_id}
     end
 
-    test "post & find", %{:channel_id => channel_id, :user_id => user_id} do
+    test "post & find", context do
       assert %{"id" => id} = Messaging.MessageClient.post(
-               %{channel_id: channel_id, sender_id: user_id, content: "Content"}
+               Map.merge(context, %{content: "test-content"})
              )
     end
   end
