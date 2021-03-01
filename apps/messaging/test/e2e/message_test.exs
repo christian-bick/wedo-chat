@@ -25,7 +25,7 @@ defmodule E2E.MessageTest do
       assert %{"id" => message_id} = find_result
     end
 
-    test "recent", context do
+    test "find with messages", context do
       Messaging.MessageClient.post(Map.merge(context, %{content: "test-1"}))
       Messaging.MessageClient.post(Map.merge(context, %{content: "test-2"}))
       Messaging.MessageClient.post(Map.merge(context, %{content: "test-3"}))

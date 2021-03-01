@@ -1,4 +1,4 @@
-defmodule E2E.MessageTest do
+defmodule E2E.ChannelTest do
   use ExUnit.Case, async: false
 
   setup_all do
