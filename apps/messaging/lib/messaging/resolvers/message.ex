@@ -1,7 +1,7 @@
 defmodule Messaging.MessageResolver do
 
   def post(_parent, %{:channel_id => channel_id, :sender_id => sender_id, :content => content}, _resolution) do
-    Redix.command(:redis, ["XADD", "channel-#{channel_id}", "*", "sender_id", sender_id, "content", content])
+    Redix.command(:redis, ["XADD", "channel:#{channel_id}", "*", "sender_id", sender_id, "content", content])
     |> Redis.StreamResultMapper.singleAdd
   end
 
