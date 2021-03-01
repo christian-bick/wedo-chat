@@ -1,4 +1,4 @@
-defmodule E2E.ChannelTest do
+defmodule E2E.MessageTest do
   use ExUnit.Case, async: false
 
   setup_all do
@@ -12,7 +12,7 @@ defmodule E2E.ChannelTest do
       createResult = Neuron.query(
         """
         mutation createChannel {
-          createChannel(name: "World") {
+          createChannel {
             id
           }
         }
@@ -36,10 +36,9 @@ defmodule E2E.ChannelTest do
       findResult = Neuron.query(
         """
         {
-         channel(id: "#{id}") {
-           id
-           name
-         }
+          channel(id: "#{id}") {
+            id
+          }
         }
         """
       )
@@ -51,7 +50,6 @@ defmodule E2E.ChannelTest do
                    "data" => %{
                      "channel" => %{
                        "id" => id,
-                       "name" => "World"
                      }
                    }
                  },
