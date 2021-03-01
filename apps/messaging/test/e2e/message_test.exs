@@ -14,8 +14,11 @@ defmodule E2E.ChannelTest do
     end
 
     test "post & find", context do
-      assert %{"id" => id} = Messaging.MessageClient.post(
+      assert %{"id" => message_id} = Messaging.MessageClient.post(
                Map.merge(context, %{content: "test-content"})
+             )
+      assert %{"id" => message_id} = Messaging.MessageClient.find(
+               %{channel_id: context.channel_id, message_id: message_id}
              )
     end
   end

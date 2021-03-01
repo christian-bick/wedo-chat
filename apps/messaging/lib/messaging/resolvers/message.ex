@@ -5,8 +5,11 @@ defmodule Messaging.MessageResolver do
     |> Redis.StreamResultMapper.singleAdd
   end
 
-  def find(_parent, %{:id => id}, _resolution) do
-    IO.inspect(id);
+  def find(_parent, %{:channel_id => channel_id, :message_id => message_id}, _resolution) do
+    {:ok, %{:id => id, :entries => entries}} =
+      Redix.command(:redis, ["XRANGE", "channel:#{channel_id}", message_id, "+", "COUNT", "1"])
+      |> Redis.StreamResultMapper.singleRead
+    {:ok, Map.merge(%{id: id}, entries)}
   end
 
   def recent(_parent, _args, _resolution) do

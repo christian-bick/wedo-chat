@@ -48,7 +48,8 @@ defmodule MessagingWeb.Schema do
       resolve &Messaging.ChannelResolver.find/3
     end
 
-    field :find_message, non_null(:message) do
+    field :message, non_null(:message) do
+      arg :channel_id, non_null(:id)
       arg :message_id, non_null(:id)
       resolve &Messaging.MessageResolver.find/3
     end

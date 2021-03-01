@@ -12,11 +12,11 @@ defmodule Messaging.MessageClient do
     |> Neuron.ResponseMapper.field(:postMessage)
   end
 
-  def find(id) do
+  def find(args) do
     Neuron.query(
       """
       {
-        message (id: "#{id}") {
+        message (channel_id: "#{args.channel_id}", message_id: "#{args.message_id}") {
           id
         }
       }
